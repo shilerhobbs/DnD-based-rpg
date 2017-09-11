@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="24" height="18" tilewidth="32" tileheight="32" nextobjectid="31">
+ <tileset firstgid="1" source="base colors.tsx"/>
+ <tileset firstgid="101" source="RPGmakerXPMegaTileset_Edited.tsx"/>
+ <tileset firstgid="3925" source="RPGmakerXPMegaTileset_Edited.tsx"/>
+ <tileset firstgid="7749" source="Interior stuff.tsx"/>
+ <layer name="Tile Layer 1" width="24" height="18">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2766,2766,2766,2766,2766,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2766,2766,2766,2766,2766,1,2766,2766,2766,2766,2766,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,2766,1,1,1,1,
+1,1,1,1,1,1,1,1,1,2766,2766,2766,2766,2766,1,2766,2766,2766,2766,2766,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,2766,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+ <layer name="Tile Layer 2" width="24" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,2715,2715,2715,2715,2715,0,2715,2715,2715,2715,2715,0,0,0,0,
+0,0,0,0,0,0,0,0,0,2731,2731,2731,2731,2731,2715,2731,2731,2731,2731,2731,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,2731,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2715,2715,2715,2715,2715,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,2715,2731,2731,2731,2731,2731,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,2731,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Tile Layer 3" width="24" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,8232,8230,0,8005,0,7943,0,0,7924,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,8197,8198,8199,8200,8037,0,7975,7941,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8073,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8105,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,8165,0,0,0,0,8011,8012,0,8011,8012,0,0,0,0,
+0,0,0,0,0,0,0,0,0,8165,8133,0,0,0,0,8043,8044,7973,8043,8044,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Tile Layer 4" width="24" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8058,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Tile Layer 5" width="24" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Tile Layer 6" width="24" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="1" name="wall" type="wall" x="276" y="128" width="12" height="361"/>
+  <object id="2" name="wall" type="wall" x="288" y="448" width="64" height="41"/>
+  <object id="3" name="wall" type="wall" x="352" y="480" width="32" height="9"/>
+  <object id="4" name="wall" type="wall" x="384" y="448" width="269" height="41"/>
+  <object id="5" name="wall" type="wall" x="448" y="416" width="32" height="32"/>
+  <object id="6" name="wall" type="wall" x="640" y="128" width="13" height="320"/>
+  <object id="10" name="wall" type="wall" x="288" y="128" width="352" height="32"/>
+  <object id="11" name="wall" type="wall" x="448" y="160" width="32" height="32"/>
+  <object id="12" name="wall" type="wall" x="448" y="256" width="192" height="64"/>
+  <object id="13" name="wall" type="wall" x="448" y="320" width="32" height="32"/>
+  <object id="14" name="wall" type="wall" x="320" y="320" width="32" height="14"/>
+  <object id="15" name="player" type="player" x="576" y="192" width="32" height="32"/>
+  <object id="16" name="event" type="event" x="352" y="469" width="32" height="11">
+   <properties>
+    <property name="destination" value="home_exterior"/>
+   </properties>
+  </object>
+  <object id="17" name="dialog" type="dialog" x="546" y="320" width="26" height="19">
+   <properties>
+    <property name="dialog1" value=" I wonder what she was"/>
+    <property name="dialog2" value=" searching for?"/>
+    <property name="dialog3" value=""/>
+    <property name="dialog4" value="Ive tried to read this book "/>
+    <property name="dialog5" value="a thousand times but the "/>
+    <property name="dialog6" value="letters are so strange."/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value="end"/>
+   </properties>
+  </object>
+  <object id="21" name="dialog" type="dialog" x="480" y="320" width="60" height="19">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value=""/>
+    <property name="dialog4" value="Ive read so many of these"/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=""/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+  <object id="22" name="dialog" type="dialog" x="581" y="320" width="60" height="19">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value=""/>
+    <property name="dialog4" value="Ive read so many of these"/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=""/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+  <object id="23" name="dialog" type="dialog" x="393" y="164" width="17" height="13">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value="Im still not great at "/>
+    <property name="dialog4" value="chopping veggies"/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=""/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+  <object id="24" name="dialog" type="dialog" x="291" y="161" width="25" height="19">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value="ow hot"/>
+    <property name="dialog4" value=""/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=""/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+  <object id="25" name="dialog" type="dialog" x="323" y="161" width="25" height="19">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value="eh my hands are clean"/>
+    <property name="dialog4" value=""/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=". . . sort of"/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+  <object id="26" name="dialog" type="dialog" x="423" y="161" width="18" height="19">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value="A bunch of stale bread"/>
+    <property name="dialog4" value="and old cheese"/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=""/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+  <object id="27" name="dialog" type="dialog" x="487" y="161" width="18" height="19">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value="A closet for my one outfit"/>
+    <property name="dialog4" value=""/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=""/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+  <object id="28" name="dialog" type="dialog" x="519" y="165" width="18" height="19">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value="Thats my where i put"/>
+    <property name="dialog4" value="my undies"/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=""/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+  <object id="29" name="dialog" type="dialog" x="584" y="154" width="18" height="19">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value=""/>
+    <property name="dialog4" value="My mom painted this"/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=""/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+  <object id="30" name="dialog" type="dialog" x="615" y="203" width="18" height="43">
+   <properties>
+    <property name="dialog1" value=""/>
+    <property name="dialog2" value=""/>
+    <property name="dialog3" value="Gee I need a new bed."/>
+    <property name="dialog4" value=""/>
+    <property name="dialog5" value=""/>
+    <property name="dialog6" value=""/>
+    <property name="dialog7" value=""/>
+    <property name="dialog8" value=""/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="10" height="8" tilewidth="32" tileheight="32" nextobjectid="17">
+ <tileset firstgid="1" source="base colors.tsx"/>
+ <tileset firstgid="101" source="RPGmakerXPMegaTileset_Edited.tsx"/>
+ <tileset firstgid="3925" source="Interior stuff.tsx"/>
+ <layer name="Tile Layer 1" width="10" height="8">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,
+1,2786,2786,2786,2786,2786,2786,2786,2786,1,
+1,2786,2786,2786,2786,2786,2786,2786,2786,1,
+1,2786,2786,2786,2786,2786,2786,2786,2786,1,
+1,2786,2786,2786,2786,2786,2786,2786,2786,1,
+1,2786,2786,2786,2786,2786,2786,2786,2786,1,
+1,2786,2786,2786,2786,2786,2786,2786,2786,1,
+1,1,1,1,1,2786,1,1,1,1
+</data>
+ </layer>
+ <layer name="Tile Layer 2" width="10" height="8">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,2715,2715,2715,2715,2715,2715,2715,2715,0,
+0,2731,2731,2731,2731,2731,2731,2731,2731,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="Tile Layer 3" width="10" height="8">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,4060,0,0,0,0,0,4181,0,
+0,0,4092,0,4373,4374,4375,4376,4213,0,
+0,4249,0,0,0,0,0,0,0,0,
+0,4281,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,4309,4341,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,3991,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="3" name="wall" type="wall" x="288" y="32" width="32" height="224"/>
+  <object id="4" name="wall" type="wall" x="192" y="224" width="96" height="32"/>
+  <object id="5" name="wall" type="wall" x="32" y="224" width="128" height="32"/>
+  <object id="6" name="wall" type="wall" x="0" y="32" width="32" height="224"/>
+  <object id="10" name="wall" type="wall" x="32" y="96" width="32" height="64"/>
+  <object id="11" name="wall" type="wall" x="32" y="32" width="256" height="64"/>
+  <object id="14" name="wall" type="wall" x="200" y="168" width="16" height="24"/>
+  <object id="15" name="wall" type="wall" x="232" y="168" width="16" height="16"/>
+  <object id="16" name="player" type="player" x="96" y="128" width="32" height="32"/>
+ </objectgroup>
+</map>

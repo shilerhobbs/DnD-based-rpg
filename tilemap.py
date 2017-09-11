@@ -1,6 +1,6 @@
 import pygame as pg
 import pytmx
-from prepare import *
+from settings import *
 
 
 

@@ -1,7 +1,8 @@
 import pygame as pg
+import settings
+from settings import *
 
-import prepare, tools
-from prepare import *
+
 
 from tilemap import collide_hit_rect
 
@@ -71,68 +72,147 @@ def collide_with_encounter(sprite, group, dir):
             #sprite.game.game_state = game_states['battle']
 
 
+def collide_with_dialog(sprite, group, dir):
+    if dir == 'x':
+        hits = pg.sprite.collide_rect(sprite,group)
+        if hits:
+            sprite.dialog = True
+            sprite.dialog_text1 = group.dialog1
+            sprite.dialog_text2 = group.dialog2
+            sprite.dialog_text3 = group.dialog3
+            sprite.dialog_text4 = group.dialog4
+            sprite.dialog_text5 = group.dialog5
+            sprite.dialog_text6 = group.dialog6
+            sprite.dialog_text7 = group.dialog7
+            sprite.dialog_text8 = group.dialog8
+
+
+
+
+    if dir == 'y':
+        hits = pg.sprite.collide_rect(sprite,group)
+        if hits:
+            sprite.dialog = True
+            sprite.dialog_text1 = group.dialog1
+            sprite.dialog_text2 = group.dialog2
+            sprite.dialog_text3 = group.dialog3
+            sprite.dialog_text4 = group.dialog4
+            sprite.dialog_text5 = group.dialog5
+            sprite.dialog_text6 = group.dialog6
+            sprite.dialog_text7 = group.dialog7
+            sprite.dialog_text8 = group.dialog8
+
 
 
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
+
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
+
 
 
         self.vel = vec(0, 0)
         self.pos = vec(x, y)
         self.frame = 1
         self.speed = PLAYER_SPEED
-        self.player_img = None
-        self.image = None
+        self.player_img_1 = statemachine.GFX['female_front']
+        self.player_img_2 = statemachine.GFX['female_front_l']
+        self.player_img_3 = statemachine.GFX['female_front_r']
+        self.player_img_4 = statemachine.GFX['female_back']
+        self.player_img_5 = statemachine.GFX['female_back_l']
+        self.player_img_6 = statemachine.GFX['female_back_r']
+        self.player_img_7 = statemachine.GFX['female_right']
+        self.player_img_8 = statemachine.GFX['female_right_l']
+        self.player_img_9 = statemachine.GFX['female_right_r']
+        self.player_img_10 = statemachine.GFX['female_left']
+        self.player_img_11 = statemachine.GFX['female_left_l']
+        self.player_img_12 = statemachine.GFX['female_left_r']
+
+        self.image_dict_f = {1: self.player_img_1,
+                             2: self.player_img_2,
+                             3: self.player_img_3}
+
+        self.image_dict_b = {1: self.player_img_4,
+                             2: self.player_img_5,
+                             3: self.player_img_6}
+
+        self.image_dict_r = {1: self.player_img_7,
+                             2: self.player_img_8,
+                             3: self.player_img_9}
+        self.image_dict_l = {1: self.player_img_10,
+                             2: self.player_img_11,
+                             3: self.player_img_12}
+
+        self.image = self.image_dict_f[1]
         self.rect = self.image.get_rect().inflate(-5, -5)
         self.rect.center = (x, y)
         self.hit_rect = PLAYER_HIT_RECT
         self.hit_rect.center = self.rect.center
-        self.frames = tools.strip_from_sheet(prepare.GFX['female_1'],(0,0),(12,18),3,3)
 
-
+        self.select = False
 
         self.map_change = False
         self.map_change_dest = 0
+
+        self.dialog = False
+        self.dialog_text1 = None
+        self.dialog_text2 = None
+        self.dialog_text3 = None
+        self.dialog_text4 = None
+        self.dialog_text5 = None
+        self.dialog_text6 = None
+        self.dialog_text7 = None
+        self.dialog_text8 = None
+        self.dialog_time = 0
+        self.dialog_time_after = 0
+        self.info = False
 
     def get_keys(self):
         self.vel = vec(0, 0)
         self.speed = PLAYER_SPEED
 
-        if not self.game.loading:
 
-            keys = pg.key.get_pressed()
 
+        keys = pg.key.get_pressed()
+        if not self.dialog:
             if keys[pg.K_LSHIFT]:
                 self.speed = PLAYER_SPEED * 2
             if keys[pg.K_LEFT] or keys[pg.K_a]:
-                self.vel = vec(-self.speed,0)
+                self.vel += vec(-self.speed,0)###########   chang to = for four dir  +=  for 8
             if keys[pg.K_RIGHT] or keys[pg.K_d]:
-                self.vel = vec(self.speed,0)
+                self.vel += vec(self.speed,0)
             if keys[pg.K_UP] or keys[pg.K_w]:
-                self.vel = vec(0, -self.speed)
+                self.vel += vec(0, -self.speed)
             if keys[pg.K_DOWN] or keys[pg.K_s]:
-                self.vel = vec(0, self.speed)
-            else:
-                pass
+                self.vel += vec(0, self.speed)
+        if keys[pg.K_SPACE]:
+            self.select = True
+        else:
+            self.select = False
+
 
     def animate(self):
-
-        ####down
+        if self.frame == 4:
+            self.frame = 1
+            ####down
         if self.vel == vec(0, self.speed):
-            pass
-        ###up
+            self.image = self.image_dict_f[self.frame]
+            self.frame += 1
+            ###up
         if self.vel == vec(0, -self.speed):
-            pass
-        ####right
+            self.image = self.image_dict_b[self.frame]
+            self.frame += 1
+            ####right
         if self.vel == vec(self.speed, 0):
-            pass
-        ###left
+            self.image = self.image_dict_r[self.frame]
+            self.frame += 1
+            ###left
         if self.vel == vec(-self.speed, 0):
-            pass
+            self.image = self.image_dict_l[self.frame]
+            self.frame += 1
         else:
             pass
 
@@ -140,12 +220,14 @@ class Player(pg.sprite.Sprite):
 
 
 
-    def update(self):
+    def update(self, dt):
+
+
         self.get_keys()
         self.animate()
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
-        self.pos += self.vel * self.game.dt
+        self.pos += self.vel * dt
         self.hit_rect.centerx = self.pos.x
         collide_with_walls(self, self.game.walls, 'x')
 
@@ -155,6 +237,23 @@ class Player(pg.sprite.Sprite):
         for encounter in self.game.encounter:
             collide_with_encounter(self, encounter, 'x')
             collide_with_encounter(self, encounter, 'y')
+        for dialog in self.game.dialog:
+            if self.select:
+                if self.dialog_time_after >= 10:
+                    collide_with_dialog(self, dialog, 'x')
+                    collide_with_dialog(self, dialog, 'y')
+        if self.dialog:
+            self.dialog_time += 1
+            if self.dialog_time >= 10:
+                if self.select:
+
+                    self.dialog = False
+                    self.dialog_time = 0
+                    self.dialog_time_after = 0
+                    self.info = True
+            else:
+                pass
+
 
         self.hit_rect.centery = self.pos.y
         collide_with_walls(self, self.game.walls, 'y')
@@ -163,7 +262,7 @@ class Player(pg.sprite.Sprite):
 
         self.rect.center = self.hit_rect.center
 
-
+        self.dialog_time_after += 1
 
 
 class Obstacle(pg.sprite.Sprite):
@@ -203,3 +302,24 @@ class Encounter(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.location = location
+
+class Dialog(pg.sprite.Sprite):
+    def __init__(self, game, x, y, w, h, dialog1, dialog2, dialog3, dialog4,
+                 dialog5, dialog6, dialog7, dialog8):
+        self.groups = game.dialog
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.rect = pg.Rect(x, y, w, h)
+        self.hit_rect = self.rect
+        self.x = x
+        self.y = y
+        self.rect.x = x
+        self.rect.y = y
+        self.dialog1 = dialog1
+        self.dialog2 = dialog2
+        self.dialog3 = dialog3
+        self.dialog4 = dialog4
+        self.dialog5 = dialog5
+        self.dialog6 = dialog6
+        self.dialog7 = dialog7
+        self.dialog8 = dialog8
