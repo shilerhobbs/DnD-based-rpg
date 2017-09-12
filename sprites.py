@@ -1,6 +1,9 @@
 import pygame as pg
 import settings
 from settings import *
+import enemys
+from enemys import *
+from player_stats import *
 
 
 
@@ -61,6 +64,11 @@ def collide_with_encounter(sprite, group, dir):
         if hits:
             sprite.battle_loc = group.location
             sprite.battle = True
+            enemys.enemy1 = group.enemy1
+            enemys.enemy2 = group.enemy2
+            enemys.enemy3 = group.enemy3
+            enemys.enemy4 = group.enemy4
+            enemys.enemy5 = group.enemy5
             #sprite.game.game_state = game_states['battle']
 
 
@@ -174,6 +182,9 @@ class Player(pg.sprite.Sprite):
         self.battle = False
         self.battle_loc = None
 
+        self.time_since_last = 0
+        self.time_count = 1
+
     def get_keys(self):
         self.vel = vec(0, 0)
         self.speed = PLAYER_SPEED
@@ -184,6 +195,9 @@ class Player(pg.sprite.Sprite):
         if not self.dialog:
             if keys[pg.K_LSHIFT]:
                 self.speed = PLAYER_SPEED * 2
+                self.time_count *= 1.1
+            if not keys[pg.K_LSHIFT]:
+                self.time_count = 1.5
             if keys[pg.K_LEFT] or keys[pg.K_a]:
                 self.vel += vec(-self.speed,0)###########   chang to = for four dir  +=  for 8
             if keys[pg.K_RIGHT] or keys[pg.K_d]:
@@ -198,28 +212,33 @@ class Player(pg.sprite.Sprite):
             self.select = False
 
 
-    def animate(self):
-        if self.frame == 4:
-            self.frame = 1
-            ####down
-        if self.vel == vec(0, self.speed):
-            self.image = self.image_dict_f[self.frame]
-            self.frame += 1
-            ###up
-        if self.vel == vec(0, -self.speed):
-            self.image = self.image_dict_b[self.frame]
-            self.frame += 1
-            ####right
-        if self.vel == vec(self.speed, 0):
-            self.image = self.image_dict_r[self.frame]
-            self.frame += 1
-            ###left
-        if self.vel == vec(-self.speed, 0):
-            self.image = self.image_dict_l[self.frame]
-            self.frame += 1
-        else:
-            pass
 
+    def animate(self):
+
+        if self.time_since_last >= 20:
+            if self.frame == 4:
+                self.frame = 1
+                ####down
+            if self.vel == vec(0, self.speed):
+                self.image = self.image_dict_f[self.frame]
+                self.frame += 1
+                ###up
+            if self.vel == vec(0, -self.speed):
+                self.image = self.image_dict_b[self.frame]
+                self.frame += 1
+                ####right
+            if self.vel == vec(self.speed, 0):
+                self.image = self.image_dict_r[self.frame]
+                self.frame += 1
+                ###left
+            if self.vel == vec(-self.speed, 0):
+                self.image = self.image_dict_l[self.frame]
+                self.frame += 1
+            else:
+                pass
+            self.time_since_last = 0
+        else:
+            self.time_since_last += self.time_count
 
 
 
@@ -295,7 +314,7 @@ class Event(pg.sprite.Sprite):
         self.destination = destination
 
 class Encounter(pg.sprite.Sprite):
-    def __init__(self, game, x, y, w, h, location):
+    def __init__(self, game, x, y, w, h, location, enemy1, enemy2, enemy3, enemy4, enemy5):
         self.groups = game.encounter
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
@@ -306,6 +325,11 @@ class Encounter(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.location = location
+        self.enemy1 = enemy1
+        self.enemy2 = enemy2
+        self.enemy3 = enemy3
+        self.enemy4 = enemy4
+        self.enemy5 = enemy5
 
 class Dialog(pg.sprite.Sprite):
     def __init__(self, game, x, y, w, h, dialog1, dialog2, dialog3, dialog4,

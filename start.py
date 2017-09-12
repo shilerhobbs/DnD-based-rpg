@@ -6,6 +6,9 @@ from os import path
 from settings import *
 import sprites
 import tilemap
+from player_stats import *
+import enemys
+from enemys import *
 
 
 class SplashScreen(statemachine.GameState):
@@ -137,6 +140,8 @@ class Gameplay(statemachine.GameState):
             self.event.remove(event)
         for dialog in self.dialog:
             self.dialog.remove(dialog)
+        for encounter in self.encounter:
+            self.encounter.remove(encounter)
         self.map = tilemap.TiledMap(path.join('resources','maps', settings.play_map))
         self.map_img = self.map.make_map()
         self.map.rect = self.map_img.get_rect()
@@ -159,7 +164,12 @@ class Gameplay(statemachine.GameState):
             if tile_object.name == 'encounter':
                 sprites.Encounter(self, tile_object.x, tile_object.y,
                                   tile_object.width, tile_object.height,
-                                  tile_object.properties['location'])
+                                  tile_object.properties['location'],
+                                  tile_object.properties['enemy1'],
+                                  tile_object.properties['enemy2'],
+                                  tile_object.properties['enemy3'],
+                                  tile_object.properties['enemy4'],
+                                  tile_object.properties['enemy5'])
 
             if tile_object.name == 'dialog':
                 sprites.Dialog(self, tile_object.x, tile_object.y,
@@ -286,6 +296,7 @@ class Gameplay(statemachine.GameState):
 class BattleScreen(statemachine.GameState):
     def __init__(self):
         super(BattleScreen, self).__init__()
+        self.enemy = pg.sprite.Group()
         self.direction = None
         self.position = settings.position['top_left']
         self.select = False
@@ -306,15 +317,90 @@ class BattleScreen(statemachine.GameState):
         self.layer_1 = statemachine.GFX['Mountains_battleback']
         self.layer_2 = statemachine.GFX['Battle_menu_back']
         self.layer_2_loc = (0, 264)
+        self.player_img = statemachine.GFX['female_right']
+        self.player_img_1 = statemachine.GFX['female_right']
+        self.player_img_2 = statemachine.GFX['female_right_l']
+        self.player_img_3 = statemachine.GFX['female_right_r']
+        self.player_loc = (162, 193)
+        self.time_since_last = 0
+        self.frame = 1
+
+
+        self.enemy1 = None
+        self.enemy2 = None
+        self.enemy3 = None
+        self.enemy4 = None
+        self.enemy5 = None
+        self.enemy_list = [self.enemy1, self.enemy2, self.enemy3,
+                            self.enemy4, self.enemy5]
+        self.enemy1_loc = (0, 0)
+        self.enemy2_loc = (0, 0)
+        self.enemy3_loc = (0, 0)
+        self.enemy4_loc = (0, 0)
+        self.enemy5_loc = (0, 0)
+
+
 
         self.next_state = "GAMEPLAY"
 
+
+        self.attack = False
+    def startup(self, persistent):
+        if not self.enemy1 == None:
+            self.enemy1 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy1])
+        if not self.enemy2 == None:
+            self.enemy2 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy2])
+        if not self.enemy3 == None:
+            self.enemy3 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy3])
+        if not self.enemy4 == None:
+            self.enemy4 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy4])
+        if not self.enemy5 == None:
+            self.enemy5 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy5])
+
+    def start_fight(self, enemy1, enemy2, enemy3, enemy4, enemy5):
+        self.enemy1 = enemy1
+        self.enemy2 = enemy2
+        self.enemy3 = enemy3
+        self.enemy4 = enemy4
+        self.enemy5 = enemy5
+
+    def animate(self):
+
+        if self.time_since_last >= 20:
+
+            if self.frame == 5:
+                self.frame = 1
+
+            elif self.frame == 1:
+                self.player_img = self.player_img_1
+                self.frame += 1
+
+            elif self.frame == 2:
+                self.player_img = self.player_img_2
+                self.frame += 1
+            elif self.frame == 3:
+                self.player_img = self.player_img_1
+                self.frame += 1
+            elif self.frame == 4:
+                self.player_img = self.player_img_3
+                self.frame += 1
+            else:
+                pass
+            self.time_since_last = 0
+
+        else:
+            self.time_since_last += 1
+
     def update(self, dt):
 
+        self.animate()
         if self.select:
             ###   ATTACK
             if self.position == settings.position['top_left']:
-                pass
+                if not self.attack:
+                    self.attack = True
+                if self.attack:
+                    pass
             ###   ITEM
             if self.position == settings.position['top_right']:
                 pass
@@ -323,7 +409,11 @@ class BattleScreen(statemachine.GameState):
                 pass
             ###   FLEE
             if self.position == settings.position['bottom_right']:
-                self.done = True
+                if not self.attack:
+                    self.done = True
+                if self.attack:
+                    self.attack = False
+                    self.select = False
             else:
                 pass
 
@@ -389,6 +479,16 @@ class BattleScreen(statemachine.GameState):
                 self.select = True
             else:
                 self.select = False
+        if not self.attack:
+            self.button_tl = statemachine.GFX['Attack_button']
+            self.button_tr = statemachine.GFX['Item_button']
+            self.button_bl = statemachine.GFX['Equip_button']
+            self.button_br = statemachine.GFX['Flee_button']
+        if self.attack:
+            self.button_tl = statemachine.GFX['Attack_button']
+            self.button_tr = statemachine.GFX['Ranged_button']
+            self.button_bl = statemachine.GFX['Magic_button']
+            self.button_br = statemachine.GFX['Back_button']
 
 
     def draw(self, surface):
@@ -399,7 +499,22 @@ class BattleScreen(statemachine.GameState):
         surface.blit(self.button_tr, self.button_tr_loc)
         surface.blit(self.button_bl, self.button_bl_loc)
         surface.blit(self.button_br, self.button_br_loc)
+        surface.blit(self.player_img, self.player_loc)
+
+        if self.enemy1 != None:
+            surface.blit(self.enemy1.img1, self.enemy1_loc)
+        if self.enemy2 != None:
+            surface.blit(self.enemy2.img1, self.enemy2_loc)
+        if self.enemy3 != None:
+            surface.blit(self.enemy3.img1, self.enemy3_loc)
+        if self.enemy4 != None:
+            surface.blit(self.enemy4.img1, self.enemy4_loc)
+        if self.enemy5 != None:
+            surface.blit(self.enemy5.img1, self.enemy5_loc)
+
+
         surface.blit(self.cursor, self.cursor_loc)
+
 
 
 
