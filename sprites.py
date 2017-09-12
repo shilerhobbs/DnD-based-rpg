@@ -79,6 +79,11 @@ def collide_with_encounter(sprite, group, dir):
         if hits:
             sprite.battle_loc = group.location
             sprite.battle = True
+            enemys.enemy1 = group.enemy1
+            enemys.enemy2 = group.enemy2
+            enemys.enemy3 = group.enemy3
+            enemys.enemy4 = group.enemy4
+            enemys.enemy5 = group.enemy5
             #sprite.game.game_state = game_states['battle']
 
 

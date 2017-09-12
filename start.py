@@ -309,6 +309,8 @@ class BattleScreen(statemachine.GameState):
         self.button_br = statemachine.GFX['Flee_button']
         self.button_br_loc = (122,294)
         self.cursor = statemachine.GFX['small_Cursor']
+        self.cursor_down = statemachine.GFX['small_Cursor_down']
+
         self.cursor_loc = (-2,269)
         self.cursor_pos_tl = (-2, 269)
         self.cursor_pos_tr = (121, 269)
@@ -331,31 +333,56 @@ class BattleScreen(statemachine.GameState):
         self.enemy3 = None
         self.enemy4 = None
         self.enemy5 = None
+
         self.enemy_list = [self.enemy1, self.enemy2, self.enemy3,
                             self.enemy4, self.enemy5]
-        self.enemy1_loc = (0, 0)
-        self.enemy2_loc = (0, 0)
-        self.enemy3_loc = (0, 0)
-        self.enemy4_loc = (0, 0)
-        self.enemy5_loc = (0, 0)
+
+        self.enemy1_loc = (247, 227)
+        self.enemy2_loc = (306, 215)
+        self.enemy3_loc = (360, 227)
+        self.enemy4_loc = (403, 215)
+        self.enemy5_loc = (443, 227)
+        self.enemy_locs = [self.enemy1_loc, self.enemy2_loc, self.enemy3_loc,
+                           self.enemy4_loc, self.enemy5_loc]
+
+
+
+
+        self.enemy1_cur_loc = (245 ,184)
+        self.enemy2_cur_loc = (293, 170)
+        self.enemy3_cur_loc = (336, 184)
+        self.enemy4_cur_loc = (382, 170)
+        self.enemy5_cur_loc = (425, 184)
 
 
 
         self.next_state = "GAMEPLAY"
 
+        self.x = 0
+
 
         self.attack = False
+        self.melee = False
     def startup(self, persistent):
-        if not self.enemy1 == None:
-            self.enemy1 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy1])
-        if not self.enemy2 == None:
-            self.enemy2 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy2])
-        if not self.enemy3 == None:
-            self.enemy3 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy3])
-        if not self.enemy4 == None:
-            self.enemy4 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy4])
-        if not self.enemy5 == None:
-            self.enemy5 = enemys.Enemy(self, enemys.enemy_dict[enemys.enemy5])
+        self.enemy1 = enemys.enemy1
+        self.enemy2 = enemys.enemy2
+        self.enemy3 = enemys.enemy3
+        self.enemy4 = enemys.enemy4
+        self.enemy5 = enemys.enemy5
+        self.enemy_list = [self.enemy1, self.enemy2, self.enemy3,
+                           self.enemy4, self.enemy5]
+        for enemy in self.enemy_list:
+            if self.x == 5:
+                self.x = 0
+            if enemy == '':
+                self.x += 1
+            else:
+                enemy = enemys.Enemy(self, enemys.enemy_dict[enemy], self.enemy_locs[self.x])
+                self.x += 1
+        print(self.enemy.sprites())
+
+
+        #self.start_fight(enemys.enemy1,enemys.enemy2,enemys.enemy3,enemys.enemy4,enemys.enemy5)
 
     def start_fight(self, enemy1, enemy2, enemy3, enemy4, enemy5):
         self.enemy1 = enemy1
@@ -393,6 +420,12 @@ class BattleScreen(statemachine.GameState):
 
     def update(self, dt):
 
+
+        for enemy in self.enemy:
+
+            if enemy.health <= 0:
+                enemy.kill()
+
         self.animate()
         if self.select:
             ###   ATTACK
@@ -400,7 +433,7 @@ class BattleScreen(statemachine.GameState):
                 if not self.attack:
                     self.attack = True
                 if self.attack:
-                    pass
+                    self.melee = True
             ###   ITEM
             if self.position == settings.position['top_right']:
                 pass
@@ -485,13 +518,15 @@ class BattleScreen(statemachine.GameState):
             self.button_bl = statemachine.GFX['Equip_button']
             self.button_br = statemachine.GFX['Flee_button']
         if self.attack:
-            self.button_tl = statemachine.GFX['Attack_button']
+            self.button_tl = statemachine.GFX['Melee_button']
             self.button_tr = statemachine.GFX['Ranged_button']
             self.button_bl = statemachine.GFX['Magic_button']
             self.button_br = statemachine.GFX['Back_button']
 
 
+
     def draw(self, surface):
+
         surface.fill(pg.Color("black"))
         surface.blit(self.layer_1,(0,0))
         surface.blit(self.layer_2,self.layer_2_loc)
@@ -501,19 +536,12 @@ class BattleScreen(statemachine.GameState):
         surface.blit(self.button_br, self.button_br_loc)
         surface.blit(self.player_img, self.player_loc)
 
-        if self.enemy1 != None:
-            surface.blit(self.enemy1.img1, self.enemy1_loc)
-        if self.enemy2 != None:
-            surface.blit(self.enemy2.img1, self.enemy2_loc)
-        if self.enemy3 != None:
-            surface.blit(self.enemy3.img1, self.enemy3_loc)
-        if self.enemy4 != None:
-            surface.blit(self.enemy4.img1, self.enemy4_loc)
-        if self.enemy5 != None:
-            surface.blit(self.enemy5.img1, self.enemy5_loc)
+        for enemy in self.enemy:
 
+            surface.blit(enemy.img, enemy.loc)
 
         surface.blit(self.cursor, self.cursor_loc)
+
 
 
 
