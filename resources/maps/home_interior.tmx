@@ -152,6 +152,7 @@
   <object id="16" name="event" type="event" x="352" y="469" width="32" height="11">
    <properties>
     <property name="destination" value="home_exterior"/>
+    <property name="destination_for" value="home_exterior_for"/>
    </properties>
   </object>
   <object id="17" name="dialog" type="dialog" x="546" y="320" width="26" height="19">

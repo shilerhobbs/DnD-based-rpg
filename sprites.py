@@ -59,7 +59,8 @@ def collide_with_encounter(sprite, group, dir):
     if dir == 'x':
         hits = pg.sprite.collide_rect(sprite,group)
         if hits:
-            sprite.game.battle.location = group.location
+            sprite.battle_loc = group.location
+            sprite.battle = True
             #sprite.game.game_state = game_states['battle']
 
 
@@ -68,7 +69,8 @@ def collide_with_encounter(sprite, group, dir):
     if dir == 'y':
         hits = pg.sprite.collide_rect(sprite,group)
         if hits:
-            sprite.game.battle.location = group.location
+            sprite.battle_loc = group.location
+            sprite.battle = True
             #sprite.game.game_state = game_states['battle']
 
 
@@ -169,6 +171,8 @@ class Player(pg.sprite.Sprite):
         self.dialog_time = 0
         self.dialog_time_after = 0
         self.info = False
+        self.battle = False
+        self.battle_loc = None
 
     def get_keys(self):
         self.vel = vec(0, 0)

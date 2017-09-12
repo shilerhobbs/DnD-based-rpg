@@ -29,13 +29,13 @@ class SplashScreen(statemachine.GameState):
         self.cursor_pos_tr = (251, 189)
         self.cursor_pos_bl = (22, 262)
         self.cursor_pos_br = (251, 262)
-        self.next_state = "GAMEPLAY"
+        self.next_state = "STAT_F"
 
     def update(self, dt):
 
         if self.select:
             if self.position == settings.position['top_left']:
-                self.next_state = "GAMEPLAY"
+                self.next_state = "STAT_F"
                 self.done  = True
 
             if self.position == settings.position['bottom_right']:
@@ -140,6 +140,7 @@ class Gameplay(statemachine.GameState):
         self.map = tilemap.TiledMap(path.join('resources','maps', settings.play_map))
         self.map_img = self.map.make_map()
         self.map.rect = self.map_img.get_rect()
+
         # self.map_img_forgound.rect = self.map_img_forgound.get_rect()
         for tile_object in self.map.tmxdata.objects:
             obj_center = vec(tile_object.x + tile_object.width / 2,
@@ -224,9 +225,13 @@ class Gameplay(statemachine.GameState):
         if not self.player.dialog:
             self.player.get_keys()
         if self.player.map_change:
-            statemachine.screen.fill
+
             settings.play_map = map_dict[self.player.map_change_dest]
             self.make_map()
+        if self.player.battle:
+            self.next_state = "BATTLE"
+            self.done = True
+
 
 
 
@@ -252,6 +257,8 @@ class Gameplay(statemachine.GameState):
             pg.draw.rect(surface, CYAN, self.camera.apply_rect(event.rect), 1)
         for dialog in self.dialog:
             pg.draw.rect(surface, RED, self.camera.apply_rect(dialog.rect), 1)
+        for encounter in self.encounter:
+            pg.draw.rect(surface, RED, self.camera.apply_rect(encounter.rect), 1)
         ############
 
 
@@ -305,11 +312,18 @@ class BattleScreen(statemachine.GameState):
     def update(self, dt):
 
         if self.select:
+            ###   ATTACK
             if self.position == settings.position['top_left']:
                 pass
-
-            if self.position == settings.position['bottom_right']:
+            ###   ITEM
+            if self.position == settings.position['top_right']:
                 pass
+            ###   EQUIP
+            if self.position == settings.position['bottom_left']:
+                pass
+            ###   FLEE
+            if self.position == settings.position['bottom_right']:
+                self.done = True
             else:
                 pass
 
@@ -381,6 +395,116 @@ class BattleScreen(statemachine.GameState):
         surface.fill(pg.Color("black"))
         surface.blit(self.layer_1,(0,0))
         surface.blit(self.layer_2,self.layer_2_loc)
+        surface.blit(self.button_tl,self.button_tl_loc)
+        surface.blit(self.button_tr, self.button_tr_loc)
+        surface.blit(self.button_bl, self.button_bl_loc)
+        surface.blit(self.button_br, self.button_br_loc)
+        surface.blit(self.cursor, self.cursor_loc)
+
+
+
+class StatScreen(statemachine.GameState):
+    def __init__(self):
+        super(StatScreen, self).__init__()
+        self.direction = None
+        self.position = settings.position['top_left']
+        self.select = False
+        self.back_ground = statemachine.GFX['Menu_background']
+        self.button_tl = statemachine.GFX['Start_button']
+        self.button_tl_loc = (22, 175)
+        self.button_tr = statemachine.GFX['Continue_button']
+        self.button_tr_loc = (251, 175)
+        self.button_bl = statemachine.GFX['Credits_button']
+        self.button_bl_loc = (22, 248)
+        self.button_br = statemachine.GFX['Quit_button']
+        self.button_br_loc = (251, 248)
+        self.cursor = statemachine.GFX['Cursor']
+        self.cursor_loc = (22, 189)
+        self.cursor_pos_tl = (22, 189)
+        self.cursor_pos_tr = (251, 189)
+        self.cursor_pos_bl = (22, 262)
+        self.cursor_pos_br = (251, 262)
+        self.next_state = "GAMEPLAY"
+
+    def update(self, dt):
+
+        if self.select:
+            if self.position == settings.position['top_left']:
+                self.next_state = "GAMEPLAY"
+                self.done  = True
+
+            if self.position == settings.position['bottom_right']:
+                self.quit = True
+            else:
+                pass
+
+        if self.direction == settings.direction['left']:
+            if self.position == settings.position['top_right']:
+                self.cursor_loc = self.cursor_pos_tl
+                self.position = settings.position['top_left']
+            if self.position == settings.position['bottom_right']:
+                self.cursor_loc = self.cursor_pos_bl
+                self.position = settings.position['bottom_left']
+            else:
+                pass
+
+        if self.direction == settings.direction['right']:
+            if self.position == settings.position['top_left']:
+                self.cursor_loc = self.cursor_pos_tr
+                self.position = settings.position['top_right']
+            if self.position == settings.position['bottom_left']:
+                self.cursor_loc = self.cursor_pos_br
+                self.position = settings.position['bottom_right']
+            else:
+                pass
+
+        if self.direction == settings.direction['up']:
+            if self.position == settings.position['bottom_left']:
+                self.cursor_loc = self.cursor_pos_tl
+                self.position = settings.position['top_left']
+            if self.position == settings.position['bottom_right']:
+                self.cursor_loc = self.cursor_pos_tr
+                self.position = settings.position['top_right']
+            else:
+                pass
+
+        if self.direction == settings.direction['down']:
+            if self.position == settings.position['top_left']:
+                self.cursor_loc = self.cursor_pos_bl
+                self.position = settings.position['bottom_left']
+            if self.position == settings.position['top_right']:
+                self.cursor_loc = self.cursor_pos_br
+                self.position = settings.position['bottom_right']
+            else:
+                pass
+
+
+        else:
+            pass
+
+    def get_event(self, event):
+        if event.type == pg.QUIT:
+            self.quit = True
+        elif event.type == pg.KEYDOWN:
+            keys = pg.key.get_pressed()
+
+            if keys[pg.K_LEFT] or keys[pg.K_a]:
+                self.direction = settings.direction['left']
+            if keys[pg.K_RIGHT] or keys[pg.K_d]:
+                self.direction = settings.direction['right']
+            if keys[pg.K_UP] or keys[pg.K_w]:
+                self.direction = settings.direction['up']
+            if keys[pg.K_DOWN] or keys[pg.K_s]:
+                self.direction = settings.direction['down']
+            if keys[pg.K_SPACE]:
+                self.select = True
+            else:
+                self.select = False
+
+
+    def draw(self, surface):
+        surface.fill(pg.Color("black"))
+        surface.blit(self.back_ground,(0,0))
         surface.blit(self.button_tl,self.button_tl_loc)
         surface.blit(self.button_tr, self.button_tr_loc)
         surface.blit(self.button_bl, self.button_bl_loc)

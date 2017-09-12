@@ -45,7 +45,7 @@ front = map_dict['home_interior']
 
 play_map = start_map
 play_map_background = back
-play_map_forground = front
+play_map_for = front
 
 
 

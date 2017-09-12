@@ -250,7 +250,8 @@ if __name__ == "__main__":
 
     states = {"SPLASH": start.SplashScreen(),
               "GAMEPLAY": start.Gameplay(),
-              "BATTLE" : start.BattleScreen()}
+              "BATTLE" : start.BattleScreen(),
+              "STAT_F" : start.StatScreen()}
     game = Game(screen, states, "SPLASH")
     game.run()
     pg.quit()
