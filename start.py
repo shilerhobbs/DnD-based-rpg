@@ -312,6 +312,11 @@ class BattleScreen(statemachine.GameState):
         self.cursor_down = statemachine.GFX['small_Cursor_down']
 
         self.cursor_loc = (-2,269)
+
+
+
+
+
         self.cursor_pos_tl = (-2, 269)
         self.cursor_pos_tr = (121, 269)
         self.cursor_pos_bl = (-2, 295)
@@ -345,6 +350,12 @@ class BattleScreen(statemachine.GameState):
         self.enemy_locs = [self.enemy1_loc, self.enemy2_loc, self.enemy3_loc,
                            self.enemy4_loc, self.enemy5_loc]
 
+        self.cursor_down_loc = (245 ,184)
+        self.target_pos = {'first': 1, 'second': 2, 'third': 3,
+                           'fourth': 4, 'fifth': 5}
+
+
+
 
 
 
@@ -353,17 +364,27 @@ class BattleScreen(statemachine.GameState):
         self.enemy3_cur_loc = (336, 184)
         self.enemy4_cur_loc = (382, 170)
         self.enemy5_cur_loc = (425, 184)
+        self.enemy_cur_locs = [self.enemy1_cur_loc, self.enemy2_cur_loc, self.enemy3_cur_loc,
+                               self.enemy4_cur_loc, self.enemy5_cur_loc]
+
+        self.cursor_down_pos = self.target_pos['first']
 
 
 
         self.next_state = "GAMEPLAY"
 
         self.x = 0
+        self.s = 0
 
 
         self.attack = False
+        self.target = False
         self.melee = False
     def startup(self, persistent):
+        self.select = False
+        self.attack = False
+        self.target = False
+        self.melee = False
         self.enemy1 = enemys.enemy1
         self.enemy2 = enemys.enemy2
         self.enemy3 = enemys.enemy3
@@ -371,44 +392,53 @@ class BattleScreen(statemachine.GameState):
         self.enemy5 = enemys.enemy5
         self.enemy_list = [self.enemy1, self.enemy2, self.enemy3,
                            self.enemy4, self.enemy5]
-        for enemy in self.enemy_list:
-            if self.x == 5:
-                self.x = 0
-            if enemy == '':
-                self.x += 1
-            else:
-                enemy = enemys.Enemy(self, enemys.enemy_dict[enemy], self.enemy_locs[self.x])
-                self.x += 1
-        print(self.enemy.sprites())
+        self.x = 0
+        if not self.enemy1 == '':
+            self.enemy1 = enemys.Enemy(self, enemys.enemy_dict[self.enemy1], self.enemy_locs[self.x])
+            self.x += 1
+        if not self.enemy1 == '':
+            self.enemy2 = enemys.Enemy(self, enemys.enemy_dict[self.enemy2], self.enemy_locs[self.x])
+            self.x += 1
+        if not self.enemy2 == '':
+            self.enemy3 = enemys.Enemy(self, enemys.enemy_dict[self.enemy3], self.enemy_locs[self.x])
+            self.x += 1
+        if not self.enemy4== '':
+            self.enemy4 = enemys.Enemy(self, enemys.enemy_dict[self.enemy4], self.enemy_locs[self.x])
+            self.x += 1
+        if not self.enemy5 == '':
+            self.enemy5 = enemys.Enemy(self, enemys.enemy_dict[self.enemy5], self.enemy_locs[self.x])
+
 
 
         #self.start_fight(enemys.enemy1,enemys.enemy2,enemys.enemy3,enemys.enemy4,enemys.enemy5)
 
-    def start_fight(self, enemy1, enemy2, enemy3, enemy4, enemy5):
-        self.enemy1 = enemy1
-        self.enemy2 = enemy2
-        self.enemy3 = enemy3
-        self.enemy4 = enemy4
-        self.enemy5 = enemy5
 
     def animate(self):
 
-        if self.time_since_last >= 20:
+        if self.time_since_last >= 10:
 
             if self.frame == 5:
                 self.frame = 1
 
             elif self.frame == 1:
+                for enemy in self.enemy:
+                    enemy.img = enemy.img1
                 self.player_img = self.player_img_1
                 self.frame += 1
 
             elif self.frame == 2:
+                for enemy in self.enemy:
+                    enemy.img = enemy.img2
                 self.player_img = self.player_img_2
                 self.frame += 1
             elif self.frame == 3:
+                for enemy in self.enemy:
+                    enemy.img = enemy.img1
                 self.player_img = self.player_img_1
                 self.frame += 1
             elif self.frame == 4:
+                for enemy in self.enemy:
+                    enemy.img = enemy.img3
                 self.player_img = self.player_img_3
                 self.frame += 1
             else:
@@ -419,21 +449,27 @@ class BattleScreen(statemachine.GameState):
             self.time_since_last += 1
 
     def update(self, dt):
-
-
+        if self.s == 5 or -1:
+            self.s = 0
+        print(self.s)
         for enemy in self.enemy:
 
             if enemy.health <= 0:
                 enemy.kill()
 
         self.animate()
+
         if self.select:
+            if self.cursor_down_loc == self.target_pos['first']:
+                pass
             ###   ATTACK
             if self.position == settings.position['top_left']:
                 if not self.attack:
                     self.attack = True
+                    self.select = False
                 if self.attack:
                     self.melee = True
+                    self.select = False
             ###   ITEM
             if self.position == settings.position['top_right']:
                 pass
@@ -447,10 +483,11 @@ class BattleScreen(statemachine.GameState):
                 if self.attack:
                     self.attack = False
                     self.select = False
-            else:
-                pass
+
 
         if self.direction == settings.direction['left']:
+            if self.target:
+                self.cursor_down_loc = self.enemy_cur_locs[self.s]
             if self.position == settings.position['top_right']:
                 self.cursor_loc = self.cursor_pos_tl
                 self.position = settings.position['top_left']
@@ -461,6 +498,8 @@ class BattleScreen(statemachine.GameState):
                 pass
 
         if self.direction == settings.direction['right']:
+            if self.target:
+                self.cursor_down_loc = self.enemy_cur_locs[self.s]
             if self.position == settings.position['top_left']:
                 self.cursor_loc = self.cursor_pos_tr
                 self.position = settings.position['top_right']
@@ -490,9 +529,13 @@ class BattleScreen(statemachine.GameState):
             else:
                 pass
 
+        if self.melee:
+            self.target = True
 
-        else:
-            pass
+
+
+
+
 
     def get_event(self, event):
         if event.type == pg.QUIT:
@@ -502,8 +545,10 @@ class BattleScreen(statemachine.GameState):
 
             if keys[pg.K_LEFT] or keys[pg.K_a]:
                 self.direction = settings.direction['left']
+                self.s -= 1
             if keys[pg.K_RIGHT] or keys[pg.K_d]:
                 self.direction = settings.direction['right']
+                self.s += 1
             if keys[pg.K_UP] or keys[pg.K_w]:
                 self.direction = settings.direction['up']
             if keys[pg.K_DOWN] or keys[pg.K_s]:
@@ -535,12 +580,14 @@ class BattleScreen(statemachine.GameState):
         surface.blit(self.button_bl, self.button_bl_loc)
         surface.blit(self.button_br, self.button_br_loc)
         surface.blit(self.player_img, self.player_loc)
+        if self.target:
+            surface.blit(self.cursor_down, self.cursor_down_loc)
 
         for enemy in self.enemy:
 
             surface.blit(enemy.img, enemy.loc)
-
-        surface.blit(self.cursor, self.cursor_loc)
+        if not self.target:
+            surface.blit(self.cursor, self.cursor_loc)
 
 
 
