@@ -1,5 +1,6 @@
 import sys
 import pygame as pg
+import pickle
 import statemachine
 import settings
 from os import path
@@ -7,8 +8,16 @@ from settings import *
 import sprites
 import tilemap
 from player_stats import *
+from random import randint
 import enemys
 from enemys import *
+
+
+######  debug
+CYAN = (0, 255, 255)
+ORANGE = (255, 165, 0)
+RED = (255, 0, 0)
+BLACK = (0, 0, 0)
 
 
 class SplashScreen(statemachine.GameState):
@@ -38,8 +47,14 @@ class SplashScreen(statemachine.GameState):
 
         if self.select:
             if self.position == settings.position['top_left']:
+                self.persist['player_stats'] = player_stats
                 self.next_state = "STAT_F"
                 self.done  = True
+
+            if self.position == settings.position['top_right']:
+                self.next_state = "GAMEPLAY"
+                self.load_game()
+                self.done =True
 
             if self.position == settings.position['bottom_right']:
                 self.quit = True
@@ -129,6 +144,9 @@ class Gameplay(statemachine.GameState):
         self.event = pg.sprite.Group()
         self.encounter = pg.sprite.Group()
         self.dialog = pg.sprite.Group()
+        self.pause = False
+        self.persist['current_map'] = settings.start_map
+        self.level_screen = False
         # self.player = sprites.Player(self, 0, 0)
 
     def make_map(self):
@@ -211,21 +229,27 @@ class Gameplay(statemachine.GameState):
 
 
     def startup(self, persistent):
+
         self.persist = persistent
+        if 'current_map' in self.persist:
+            settings.play_map = self.persist['current_map']
         self.make_map()
         self.info1 = 'wasd to move'
         self.info2 = 'space to interact'
         self.dialog_box(self.info1,self.info2,None,None,None,None,None,None)
-        if not self.player.info:
+        self.pause = False
+        if not 'intro_seen' in self.persist:
             self.player.dialog_text1 = self.info1
             self.player.dialog_text2 = self.info2
             self.player.dialog = True
+            self.persist['intro_seen'] = True
 
 
 
 
 
     def get_event(self, event):
+        print(self.persist['player_stats']['exp'])
         if event.type == pg.QUIT:
             self.quit = True
         if self.player.dialog:
@@ -235,30 +259,68 @@ class Gameplay(statemachine.GameState):
         if not self.player.dialog:
             self.player.get_keys()
         if self.player.map_change:
+            self.persist['current_map'] = map_dict[self.player.map_change_dest]
+            settings.play_map = self.persist['current_map']
 
-            settings.play_map = map_dict[self.player.map_change_dest]
             self.make_map()
         if self.player.battle:
             self.next_state = "BATTLE"
             self.done = True
+        if self.player.pause:
+            self.next_state = "PAUSE"
+            self.done = True
 
+
+    def level_up(self):
+        self.persist['player_stats']['level'] += 1
+        self.persist['player_stats']['prof_points'] += 2
+        self.persist['player_stats']['total_hit_points'] += randint(self.persist['player_stats']['hit_die_low'],
+                                                                    self.persist['player_stats']['hit_die_high']) + self.persist['player_stats']['con mod']
+        if self.persist['player_stats']['level'] % 2 == 0:
+            self.persist['player_stats']['atr_points'] += 1
+        self.level_screen = True
 
 
 
     def update(self, dt):
         self.player.update(dt)
         self.camera.update(self.player)
+        ###  LEVEL UP
+        if self.persist['player_stats']['exp'] >= 300:
+            self.level_up()
+            if self.persist['player_stats']['exp'] >= 900:
+                self.level_up()
+                if self.persist['player_stats']['exp'] >= 2700:
+                    self.level_up()
+                    if self.persist['player_stats']['exp'] >= 6500:
+                        self.level_up()
+                        if self.persist['player_stats']['exp'] >= 14000:
+                            self.level_up()
+                            if self.persist['player_stats']['exp'] >= 23000:
+                                self.level_up()
+                                if self.persist['player_stats']['exp'] >= 34000:
+                                    self.level_up()
+                                    if self.persist['player_stats']['exp'] >= 48000:
+                                        self.level_up()
+                                        if self.persist['player_stats']['exp'] >= 64000:
+                                            self.level_up()
+                                            if self.persist['player_stats']['exp'] >= 85000:
+                                                self.level_up()
+                                                if self.persist['player_stats']['exp'] >= 100000:
+                                                    self.level_up()
+                                                    if self.persist['player_stats']['exp'] >= 120000:
+                                                        self.level_up()
+                                                        if self.persist['player_stats']['exp'] >= 140000:
+                                                            self.level_up()
+                                                            if self.persist['player_stats']['exp'] >= 165000:
+                                                                self.level_up()
 
     def draw(self, surface):
         surface.blit(self.map_img, self.camera.apply(self.map))
         for sprite in self.all_sprites:
             surface.blit(sprite.image, self.camera.apply(sprite))
 
-        ######  debug
-        CYAN = (0, 255, 255)
-        ORANGE = (255, 165, 0)
-        RED = (255, 0, 0)
-        BLACK = (0, 0, 0)
+
         for sprite in self.all_sprites:
             pg.draw.rect(surface, CYAN, self.camera.apply_rect(sprite.hit_rect), 1)
         for wall in self.walls:
@@ -343,14 +405,14 @@ class BattleScreen(statemachine.GameState):
                             self.enemy4, self.enemy5]
 
         self.enemy1_loc = (247, 227)
-        self.enemy2_loc = (306, 215)
-        self.enemy3_loc = (360, 227)
-        self.enemy4_loc = (403, 215)
-        self.enemy5_loc = (443, 227)
+        self.enemy2_loc = (295, 215)
+        self.enemy3_loc = (343, 227)
+        self.enemy4_loc = (391, 215)
+        self.enemy5_loc = (439, 227)
         self.enemy_locs = [self.enemy1_loc, self.enemy2_loc, self.enemy3_loc,
                            self.enemy4_loc, self.enemy5_loc]
 
-        self.cursor_down_loc = (245 ,184)
+        self.cursor_down_loc = (252, 192)
         self.target_pos = {'first': 1, 'second': 2, 'third': 3,
                            'fourth': 4, 'fifth': 5}
 
@@ -359,11 +421,11 @@ class BattleScreen(statemachine.GameState):
 
 
 
-        self.enemy1_cur_loc = (245 ,184)
-        self.enemy2_cur_loc = (293, 170)
-        self.enemy3_cur_loc = (336, 184)
-        self.enemy4_cur_loc = (382, 170)
-        self.enemy5_cur_loc = (425, 184)
+        self.enemy1_cur_loc = (252, 192)
+        self.enemy2_cur_loc = (300, 180)
+        self.enemy3_cur_loc = (348, 192)
+        self.enemy4_cur_loc = (396, 180)
+        self.enemy5_cur_loc = (444, 192)
         self.enemy_cur_locs = [self.enemy1_cur_loc, self.enemy2_cur_loc, self.enemy3_cur_loc,
                                self.enemy4_cur_loc, self.enemy5_cur_loc]
 
@@ -377,14 +439,20 @@ class BattleScreen(statemachine.GameState):
         self.s = 0
 
 
+
+
         self.attack = False
         self.target = False
         self.melee = False
+        self.battle_finish = False
+        self.exp_earned = 0
     def startup(self, persistent):
         self.select = False
         self.attack = False
         self.target = False
         self.melee = False
+        self.battle_finish = False
+        self.exp_earned = 0
         self.enemy1 = enemys.enemy1
         self.enemy2 = enemys.enemy2
         self.enemy3 = enemys.enemy3
@@ -394,20 +462,31 @@ class BattleScreen(statemachine.GameState):
                            self.enemy4, self.enemy5]
         self.x = 0
         if not self.enemy1 == '':
-            self.enemy1 = enemys.Enemy(self, enemys.enemy_dict[self.enemy1], self.enemy_locs[self.x])
+            self.enemy1 = enemys.Enemy(self, enemys.enemy_dict[self.enemy1], self.enemy_locs[0])
             self.x += 1
-        if not self.enemy1 == '':
-            self.enemy2 = enemys.Enemy(self, enemys.enemy_dict[self.enemy2], self.enemy_locs[self.x])
-            self.x += 1
+        else:
+            self.enemy1 = None
         if not self.enemy2 == '':
-            self.enemy3 = enemys.Enemy(self, enemys.enemy_dict[self.enemy3], self.enemy_locs[self.x])
+            self.enemy2 = enemys.Enemy(self, enemys.enemy_dict[self.enemy2], self.enemy_locs[1])
             self.x += 1
+        else:
+            self.enemy2 = None
+        if not self.enemy3 == '':
+            self.enemy3 = enemys.Enemy(self, enemys.enemy_dict[self.enemy3], self.enemy_locs[2])
+            self.x += 1
+        else:
+            self.enemy3 = None
         if not self.enemy4== '':
-            self.enemy4 = enemys.Enemy(self, enemys.enemy_dict[self.enemy4], self.enemy_locs[self.x])
+            self.enemy4 = enemys.Enemy(self, enemys.enemy_dict[self.enemy4], self.enemy_locs[3])
             self.x += 1
+        else:
+            self.enemy4 = None
         if not self.enemy5 == '':
-            self.enemy5 = enemys.Enemy(self, enemys.enemy_dict[self.enemy5], self.enemy_locs[self.x])
-
+            self.enemy5 = enemys.Enemy(self, enemys.enemy_dict[self.enemy5], self.enemy_locs[4])
+        else:
+            self.enemy5 = None
+        self.enemy_list = (self.enemy1, self.enemy2, self.enemy3,
+                           self.enemy4, self.enemy5)
 
 
         #self.start_fight(enemys.enemy1,enemys.enemy2,enemys.enemy3,enemys.enemy4,enemys.enemy5)
@@ -449,27 +528,113 @@ class BattleScreen(statemachine.GameState):
             self.time_since_last += 1
 
     def update(self, dt):
-        if self.s == 5 or -1:
+
+        if self.enemy1 == None:
+            if self.enemy2 == None:
+                if self.enemy3 == None:
+                    if self.enemy4 == None:
+                        if self.enemy5 == None:
+                            self.battle_finish = True
+        else:
+            pass
+
+        if self.s == 5:
             self.s = 0
-        print(self.s)
+        if self.s == -1:
+            self.s = 4
+
         for enemy in self.enemy:
 
             if enemy.health <= 0:
+                self.exp_earned += enemy.stats['exp']
                 enemy.kill()
+        if not self.enemy1 == None:
+            if not self.enemy1.alive():
+                self.enemy1 = None
+        if not self.enemy2 == None:
+            if not self.enemy2.alive():
+                self.enemy2 = None
+        if not self.enemy3 == None:
+            if not self.enemy3.alive():
+                self.enemy3 = None
+        if not self.enemy4 == None:
+            if not self.enemy4.alive():
+                self.enemy4 = None
+        if not self.enemy5 == None:
+            if not self.enemy5.alive():
+                self.enemy5 = None
 
         self.animate()
 
+        if not self.attack:
+            self.button_tl = statemachine.GFX['Attack_button']
+            self.button_tr = statemachine.GFX['Item_button']
+            self.button_bl = statemachine.GFX['Equip_button']
+            self.button_br = statemachine.GFX['Flee_button']
+        if self.attack:
+            self.button_tl = statemachine.GFX['Melee_button']
+            self.button_tr = statemachine.GFX['Ranged_button']
+            self.button_bl = statemachine.GFX['Magic_button']
+            self.button_br = statemachine.GFX['Back_button']
+
+
         if self.select:
-            if self.cursor_down_loc == self.target_pos['first']:
-                pass
+            if self.battle_finish:
+                self.persist['player_stats']['exp'] += self.exp_earned
+                self.done = True
+
+            #first enemy
+            if self.target:
+                if self.cursor_down_loc == self.enemy1_cur_loc:
+                    if not self.enemy1:
+                        print('no target')
+                    else:
+                        self.attack = False
+                        self.melee = False
+                        self.target = False
+                        self.player_melee_attack(self.enemy1)
+                if self.cursor_down_loc == self.enemy2_cur_loc:
+                    if not self.enemy2:
+                        print('no target')
+                    else:
+                        self.attack = False
+                        self.melee = False
+                        self.target = False
+                        self.player_melee_attack(self.enemy2)
+                if self.cursor_down_loc == self.enemy3_cur_loc:
+                    if not self.enemy3:
+                        print('no target')
+                    else:
+                        self.attack = False
+                        self.melee = False
+                        self.target = False
+                        self.player_melee_attack(self.enemy3)
+                if self.cursor_down_loc == self.enemy4_cur_loc:
+                    if not self.enemy4:
+                        print('no target')
+                    else:
+                        self.attack = False
+                        self.melee = False
+                        self.target = False
+                        self.player_melee_attack(self.enemy4)
+                if self.cursor_down_loc == self.enemy5_cur_loc:
+                    if not self.enemy5:
+                        print('no target')
+                    else:
+                        self.attack = False
+                        self.melee = False
+                        self.target = False
+                        self.player_melee_attack(self.enemy5)
+
             ###   ATTACK
             if self.position == settings.position['top_left']:
-                if not self.attack:
-                    self.attack = True
-                    self.select = False
                 if self.attack:
                     self.melee = True
                     self.select = False
+                if not self.attack:
+                    self.attack = True
+                    self.select = False
+
             ###   ITEM
             if self.position == settings.position['top_right']:
                 pass
@@ -488,6 +653,208 @@ class BattleScreen(statemachine.GameState):
         if self.direction == settings.direction['left']:
             if self.target:
                 self.cursor_down_loc = self.enemy_cur_locs[self.s]
+                self.s -= 1
+
+            if self.position == settings.position['top_right']:
+                self.cursor_loc = self.cursor_pos_tl
+                self.position = settings.position['top_left']
+            if self.position == settings.position['bottom_right']:
+                self.cursor_loc = self.cursor_pos_bl
+                self.position = settings.position['bottom_left']
+            else:
+                pass
+            self.direction = None
+
+        if self.direction == settings.direction['right']:
+            if self.target:
+                self.cursor_down_loc = self.enemy_cur_locs[self.s]
+                self.s += 1
+            if self.position == settings.position['top_left']:
+                self.cursor_loc = self.cursor_pos_tr
+                self.position = settings.position['top_right']
+            if self.position == settings.position['bottom_left']:
+                self.cursor_loc = self.cursor_pos_br
+                self.position = settings.position['bottom_right']
+            else:
+                pass
+            self.direction = None
+
+        if self.direction == settings.direction['up']:
+            if self.position == settings.position['bottom_left']:
+                self.cursor_loc = self.cursor_pos_tl
+                self.position = settings.position['top_left']
+            if self.position == settings.position['bottom_right']:
+                self.cursor_loc = self.cursor_pos_tr
+                self.position = settings.position['top_right']
+            else:
+                pass
+            self.direction = None
+
+        if self.direction == settings.direction['down']:
+            if self.position == settings.position['top_left']:
+                self.cursor_loc = self.cursor_pos_bl
+                self.position = settings.position['bottom_left']
+            if self.position == settings.position['top_right']:
+                self.cursor_loc = self.cursor_pos_br
+                self.position = settings.position['bottom_right']
+            else:
+                pass
+            self.direction = None
+
+        if self.melee:
+            self.target = True
+
+
+
+
+
+
+    def get_event(self, event):
+        if event.type == pg.QUIT:
+            self.quit = True
+        elif event.type == pg.KEYDOWN:
+            keys = pg.key.get_pressed()
+
+            if keys[pg.K_LEFT] or keys[pg.K_a]:
+                self.direction = settings.direction['left']
+                # self.s -= 1
+            if keys[pg.K_RIGHT] or keys[pg.K_d]:
+                self.direction = settings.direction['right']
+                # self.s += 1
+            if keys[pg.K_UP] or keys[pg.K_w]:
+                self.direction = settings.direction['up']
+            if keys[pg.K_DOWN] or keys[pg.K_s]:
+                self.direction = settings.direction['down']
+            if keys[pg.K_SPACE]:
+                self.select = True
+            else:
+                self.select = False
+
+    def dialog_box(self, text1, text2, text3, text4, text5, text6, text7, text8):
+        self.dialog_font = pg.font.Font('A Love of Thunder.ttf',16)
+        self.dialog_box_img = statemachine.GFX['Dialog_background']
+        self.dialog_box_loc = (110,24)
+        self.dialog_text1 = text1
+        self.dialog_text2 = text2
+        self.dialog_text3 = text3
+        self.dialog_text4 = text4
+        self.dialog_text5 = text5
+        self.dialog_text6 = text6
+        self.dialog_text7 = text7
+        self.dialog_text8 = text8
+        self.dialog1_text_loc = (120, 28)
+        self.dialog2_text_loc = (120, 46)
+        self.dialog3_text_loc = (120, 64)
+        self.dialog4_text_loc = (120, 82)
+        self.dialog5_text_loc = (120, 100)
+        self.dialog6_text_loc = (120, 116)
+        self.dialog7_text_loc = (120, 134)
+        self.dialog8_text_loc = (120, 152)
+
+
+
+    def draw(self, surface):
+
+        surface.fill(pg.Color("black"))
+        surface.blit(self.layer_1,(0,0))
+        surface.blit(self.layer_2,self.layer_2_loc)
+        surface.blit(self.button_tl,self.button_tl_loc)
+        surface.blit(self.button_tr, self.button_tr_loc)
+        surface.blit(self.button_bl, self.button_bl_loc)
+        surface.blit(self.button_br, self.button_br_loc)
+        surface.blit(self.player_img, self.player_loc)
+        if self.target:
+            surface.blit(self.cursor_down, self.cursor_down_loc)
+
+        for enemy in self.enemy:
+
+            surface.blit(enemy.img, enemy.loc)
+        if not self.target:
+            if not self.battle_finish:
+                surface.blit(self.cursor, self.cursor_loc)
+
+        if self.battle_finish:
+            self.dialog_box(str(self.exp_earned), None, None, None, None, None, None, None)
+            surface.blit(self.dialog_box_img,self.dialog_box_loc)
+            surface.blit(self.dialog_font.render(self.dialog_text1, False, BLACK, None),
+                         self.dialog1_text_loc)
+            surface.blit(self.dialog_font.render(self.dialog_text2, True, BLACK),
+                         self.dialog2_text_loc)
+            surface.blit(self.dialog_font.render(self.dialog_text3, True, BLACK),
+                         self.dialog3_text_loc)
+            surface.blit(self.dialog_font.render(self.dialog_text4, True, BLACK),
+                         self.dialog4_text_loc)
+            surface.blit(self.dialog_font.render(self.dialog_text5, True, BLACK),
+                         self.dialog5_text_loc)
+            surface.blit(self.dialog_font.render(self.dialog_text6, True, BLACK),
+                         self.dialog6_text_loc)
+            surface.blit(self.dialog_font.render(self.dialog_text7, True, BLACK),
+                         self.dialog7_text_loc)
+            surface.blit(self.dialog_font.render(self.dialog_text8, True, BLACK),
+                         self.dialog8_text_loc)
+
+    def player_melee_attack(self, target):
+        atk_roll = randint(1, 20) + self.persist['player_stats']['str mod']
+        if atk_roll >= target.stats['AC']:
+            dam_roll = randint(self.persist['player_stats']['melee_dam_low'], self.persist['player_stats']['melee_dam_high'])
+            target.health -= dam_roll
+            print('hit for', dam_roll, 'damage')
+        else:
+            print('miss / block')
+
+
+class PauseScreen(statemachine.GameState):
+    def __init__(self):
+        super(PauseScreen, self).__init__()
+        self.direction = None
+        self.position = settings.position['top_left']
+        self.select = False
+        self.back_ground = statemachine.GFX['Menu_background']
+        self.button_tl = statemachine.GFX['Start_button']
+        self.button_tl_loc = (22, 175)
+        self.button_tr = statemachine.GFX['Continue_button']
+        self.button_tr_loc = (251, 175)
+        self.button_bl = statemachine.GFX['Credits_button']
+        self.button_bl_loc = (22, 248)
+        self.button_br = statemachine.GFX['Quit_button']
+        self.button_br_loc = (251, 248)
+        self.cursor = statemachine.GFX['Cursor']
+        self.cursor_loc = (22, 189)
+        self.cursor_pos_tl = (22, 189)
+        self.cursor_pos_tr = (251, 189)
+        self.cursor_pos_bl = (22, 262)
+        self.cursor_pos_br = (251, 262)
+        self.save_text = statemachine.GFX['Saved_text']
+        self.save_text_loc = (34, 34)
+
+        self.next_state = "GAMEPLAY"
+        self.saved = False
+        self.t = 0
+
+    def update(self, dt):
+
+        if self.saved:
+            if self.t >= 100:
+                self.t = 0
+                self.saved = False
+            self.t += 1
+
+        if self.select:
+            if self.position == settings.position['top_left']:
+                self.next_state = "GAMEPLAY"
+                self.select = False
+                self.done  = True
+            if self.position == settings.position['top_right']:
+                self.save_game()
+                self.saved = True
+
+
+            if self.position == settings.position['bottom_right']:
+                self.quit = True
+            else:
+                pass
+
+        if self.direction == settings.direction['left']:
             if self.position == settings.position['top_right']:
                 self.cursor_loc = self.cursor_pos_tl
                 self.position = settings.position['top_left']
@@ -498,8 +865,6 @@ class BattleScreen(statemachine.GameState):
                 pass
 
         if self.direction == settings.direction['right']:
-            if self.target:
-                self.cursor_down_loc = self.enemy_cur_locs[self.s]
             if self.position == settings.position['top_left']:
                 self.cursor_loc = self.cursor_pos_tr
                 self.position = settings.position['top_right']
@@ -529,13 +894,9 @@ class BattleScreen(statemachine.GameState):
             else:
                 pass
 
-        if self.melee:
-            self.target = True
 
-
-
-
-
+        else:
+            pass
 
     def get_event(self, event):
         if event.type == pg.QUIT:
@@ -545,10 +906,8 @@ class BattleScreen(statemachine.GameState):
 
             if keys[pg.K_LEFT] or keys[pg.K_a]:
                 self.direction = settings.direction['left']
-                self.s -= 1
             if keys[pg.K_RIGHT] or keys[pg.K_d]:
                 self.direction = settings.direction['right']
-                self.s += 1
             if keys[pg.K_UP] or keys[pg.K_w]:
                 self.direction = settings.direction['up']
             if keys[pg.K_DOWN] or keys[pg.K_s]:
@@ -557,38 +916,18 @@ class BattleScreen(statemachine.GameState):
                 self.select = True
             else:
                 self.select = False
-        if not self.attack:
-            self.button_tl = statemachine.GFX['Attack_button']
-            self.button_tr = statemachine.GFX['Item_button']
-            self.button_bl = statemachine.GFX['Equip_button']
-            self.button_br = statemachine.GFX['Flee_button']
-        if self.attack:
-            self.button_tl = statemachine.GFX['Melee_button']
-            self.button_tr = statemachine.GFX['Ranged_button']
-            self.button_bl = statemachine.GFX['Magic_button']
-            self.button_br = statemachine.GFX['Back_button']
-
 
 
     def draw(self, surface):
-
         surface.fill(pg.Color("black"))
-        surface.blit(self.layer_1,(0,0))
-        surface.blit(self.layer_2,self.layer_2_loc)
+        surface.blit(self.back_ground,(0,0))
         surface.blit(self.button_tl,self.button_tl_loc)
         surface.blit(self.button_tr, self.button_tr_loc)
         surface.blit(self.button_bl, self.button_bl_loc)
         surface.blit(self.button_br, self.button_br_loc)
-        surface.blit(self.player_img, self.player_loc)
-        if self.target:
-            surface.blit(self.cursor_down, self.cursor_down_loc)
-
-        for enemy in self.enemy:
-
-            surface.blit(enemy.img, enemy.loc)
-        if not self.target:
-            surface.blit(self.cursor, self.cursor_loc)
-
+        surface.blit(self.cursor, self.cursor_loc)
+        if self.saved:
+            surface.blit(self.save_text, self.save_text_loc)
 
 
 

@@ -7,6 +7,7 @@ from player_stats import *
 
 
 
+
 from tilemap import collide_hit_rect
 
 
@@ -41,6 +42,7 @@ def collide_with_event(sprite, group, dir):
 
             sprite.map_change = True
             sprite.map_change_dest = group.destination
+
             # play_map_background = group.destination
             # sprite.vel.x = 0
             # sprite.hit_rect.centerx = sprite.pos.x
@@ -186,6 +188,7 @@ class Player(pg.sprite.Sprite):
         self.info = False
         self.battle = False
         self.battle_loc = None
+        self.pause = False
 
         self.time_since_last = 0
         self.time_count = 1
@@ -198,6 +201,8 @@ class Player(pg.sprite.Sprite):
 
         keys = pg.key.get_pressed()
         if not self.dialog:
+            if keys[pg.K_p]:
+                self.pause = True
             if keys[pg.K_LSHIFT]:
                 self.speed = PLAYER_SPEED * 2
                 self.time_count *= 1.1
@@ -291,6 +296,9 @@ class Player(pg.sprite.Sprite):
         self.rect.center = self.hit_rect.center
 
         self.dialog_time_after += 1
+
+
+
 
 
 class Obstacle(pg.sprite.Sprite):

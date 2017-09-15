@@ -29,7 +29,7 @@ bat_img3 = statemachine.GFX['bat_left_r']
 
 bat_stats = {'str' : 2, 'str mod' : -4, 'dex' : 15, 'dex mod' : 2, 'con' : 8, 'con mod' : -1,
                 'int' : 2, 'int mod' : -4, 'wis' : 12, 'wis mod' : 1, 'cha' : 4, 'cha mod' : -3,
-                'total_hit_points' : 3, 'current_hit_points' : 3,
+                'total_hit_points' : 3, 'current_hit_points' : 3, 'exp' : 15,
                 'speed' : 5, 'AC' : 12, 'atk_dam' : 1, 'atk_bonus' : 0,
              'img1' : bat_img1, 'img2' : bat_img2, 'img3' : bat_img3}
 
@@ -41,7 +41,7 @@ larva_img3 = statemachine.GFX['larva_left_r']
 
 larva_stats = {'str' : 2, 'str mod' : -4, 'dex' : 15, 'dex mod' : 2, 'con' : 8, 'con mod' : -1,
                 'int' : 2, 'int mod' : -4, 'wis' : 12, 'wis mod' : 1, 'cha' : 4, 'cha mod' : -3,
-                'total_hit_points' : 3, 'current_hit_points' : 3,
+                'total_hit_points' : 3, 'current_hit_points' : 3, 'exp' : 15,
                 'speed' : 5, 'AC' : 12, 'atk_dam' : 1, 'atk_bonus' : 0,
              'img1' : larva_img1, 'img2' : larva_img2, 'img3' : larva_img3}
 

@@ -1,8 +1,10 @@
 import os
 import sys
 import pygame as pg
+import pickle
 import start
 from settings import *
+from player_stats import *
 pg.init()
 screen = pg.display.set_mode((WIDTH, HEIGHT))
 
@@ -88,6 +90,14 @@ class GameState(object):
         self.screen_rect = pg.display.get_surface().get_rect()
         self.persist = {}
         self.font = pg.font.Font(None, 24)
+
+    def save_game(self):
+        self.persist['player_stats'] = player_stats
+        pickle.dump(self.persist, open('save.p', 'wb'))
+
+    def load_game(self):
+        self.persist = pickle.load(open('save.p', 'rb'))
+
 
     def startup(self, persistent):
         """
@@ -251,7 +261,8 @@ if __name__ == "__main__":
     states = {"SPLASH": start.SplashScreen(),
               "GAMEPLAY": start.Gameplay(),
               "BATTLE" : start.BattleScreen(),
-              "STAT_F" : start.StatScreen()}
+              "STAT_F" : start.StatScreen(),
+              "PAUSE" : start.PauseScreen()}
     game = Game(screen, states, "SPLASH")
     game.run()
     pg.quit()

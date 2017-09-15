@@ -240,7 +240,7 @@
     <property name="enemy1" value="bat"/>
     <property name="enemy2" value="bat"/>
     <property name="enemy3" value="larva"/>
-    <property name="enemy4" value=""/>
+    <property name="enemy4" value="bat"/>
     <property name="enemy5" value=""/>
     <property name="location" value=""/>
    </properties>
