@@ -15,6 +15,11 @@ class TiledMap:
         self.width = tm.width * tm.tilewidth
         self.height = tm.height * tm.tileheight
         self.tmxdata = tm
+        if tm.properties['encounters'] == 'true':
+            self.encounters = True
+        else:
+            self.encounters = False
+
 
     def render(self, surface):
         ti = self.tmxdata.get_tile_image_by_gid

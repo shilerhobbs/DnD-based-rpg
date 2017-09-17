@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="24" height="18" tilewidth="32" tileheight="32" nextobjectid="31">
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="24" height="18" tilewidth="32" tileheight="32" nextobjectid="34">
+ <properties>
+  <property name="encounters" type="bool" value="false"/>
+ </properties>
  <tileset firstgid="1" source="base colors.tsx"/>
  <tileset firstgid="101" source="RPGmakerXPMegaTileset_Edited.tsx"/>
  <layer name="Tile Layer 1" width="24" height="18">
@@ -150,7 +153,7 @@
   <object id="11" name="wall" type="wall" x="212" y="122" width="19" height="3"/>
   <object id="12" name="wall" type="wall" x="596" y="223" width="19" height="3"/>
   <object id="13" name="wall" type="wall" x="628" y="447" width="19" height="3"/>
-  <object id="14" name="event" type="event" x="386" y="567" width="125" height="9">
+  <object id="14" name="event" type="event" x="386" y="564" width="125" height="9">
    <properties>
     <property name="desination_for" value=""/>
     <property name="destination" value="cross_roads"/>
@@ -235,15 +238,6 @@
     <property name="dialog8" value=""/>
    </properties>
   </object>
-  <object id="29" name="encounter" type="encouter" x="473" y="142" width="62" height="30">
-   <properties>
-    <property name="enemy1" value="bat"/>
-    <property name="enemy2" value="bat"/>
-    <property name="enemy3" value="larva"/>
-    <property name="enemy4" value="bat"/>
-    <property name="enemy5" value=""/>
-    <property name="location" value=""/>
-   </properties>
-  </object>
+  <object id="31" name="wall" type="wall" x="386" y="573" width="125" height="3"/>
  </objectgroup>
 </map>

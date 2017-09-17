@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="36" height="18" tilewidth="32" tileheight="32" nextobjectid="3">
+ <properties>
+  <property name="encounters" type="bool" value="true"/>
+ </properties>
  <tileset firstgid="1" source="RPGmakerXPMegaTileset_Edited.tsx"/>
  <layer name="Tile Layer 1" width="36" height="18">
   <data encoding="csv">

@@ -128,6 +128,7 @@ class Player(pg.sprite.Sprite):
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
+        self.player_step = False
 
 
 
@@ -210,16 +211,23 @@ class Player(pg.sprite.Sprite):
                 self.time_count = 1.5
             if keys[pg.K_LEFT] or keys[pg.K_a]:
                 self.vel += vec(-self.speed,0)###########   chang to = for four dir  +=  for 8
+                self.player_step = True
             if keys[pg.K_RIGHT] or keys[pg.K_d]:
                 self.vel += vec(self.speed,0)
+                self.player_step = True
             if keys[pg.K_UP] or keys[pg.K_w]:
                 self.vel += vec(0, -self.speed)
+                self.player_step = True
             if keys[pg.K_DOWN] or keys[pg.K_s]:
                 self.vel += vec(0, self.speed)
+                self.player_step = True
+            else:
+                self.player_step = False
         if keys[pg.K_SPACE]:
             self.select = True
         else:
             self.select = False
+
 
 
 
