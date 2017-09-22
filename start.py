@@ -524,6 +524,8 @@ class BattleScreen(statemachine.GameState):
         self.turn_count = 0
         self.turns = []
         self.turns_order = []
+        self.player_turn = False
+        self.current_sprite = None
 
 
     def startup(self, persistent):
@@ -605,6 +607,7 @@ class BattleScreen(statemachine.GameState):
             self.init_list[enemy.init] = self
             self.all_sprites.add(enemy)
             self.t += 1
+            print('enemy', enemy, vars(enemy))
         for party in self.party:
             party.init_roll()
             self.init_list[party.init] = self
@@ -626,17 +629,22 @@ class BattleScreen(statemachine.GameState):
 
         self.enemy_list = (self.enemy1, self.enemy2, self.enemy3,
                            self.enemy4, self.enemy5)
-        print(self.turns)
+        print('self.turns',self.turns)
         self.turn_count_len = len(self.turns_order)
 
 
 
-        self.current_turn = self.turns[self.turn_count]
-        self.current_turn.turn = True
+        self.turns[self.turn_count].turn = True
+
+        print(self.turns)
+        print(self.turns_order)
         print(self.init_list)
-        print(self.current_turn)
-        self.player_turn = False
-        self.current_char = None
+        print(self.turns[self.turn_count])
+        print(vars(self.turns[self.turn_count]))
+
+        for sprite in self.all_sprites:
+            if sprite.init == self.turns_order[0]:
+                sprite.turn = True
 
 
 
@@ -683,18 +691,41 @@ class BattleScreen(statemachine.GameState):
             self.time_since_last += 1
 
     def update(self, dt):
+        print(self.all_sprites)
 
         # Turn counter
-        if not self.current_turn.turn:
-            self.turn_count += 1
-            if self.turn_count > self.turn_count_len:
-                self.turn_count = 0
-            self.current_turn = self.turns[self.turn_count]
-            self.current_turn.turn = True
+        for sprite in self.all_sprites:
+            print(sprite, sprite.turn)
+            if sprite.done:
+                sprite.done = False
+                sprite.turn = False
+                self.turn_count += 1
+                if self.turn_count > self.turn_count_len:
+                    self.turn_count = 1
+                if sprite.player:
+                    self.player_turn = False
 
-        for party in self.party:
-            if party.turn:
-                self.player_turn == True
+                ##CONFIRM CHANGE
+                for spri in self.all_sprites:
+                    if spri.init == self.turns_order[self.turn_count - 1]:
+                        spri.turn = True
+                    else:
+                        pass
+
+                ##
+
+
+
+
+            if sprite.turn:
+                if sprite.player:
+                    self.player_turn = True
+                    self.current_sprite = sprite
+                else:
+                    sprite.take_turn()
+
+        if not self.party1 == None:
+            pass
 
 
 
@@ -773,7 +804,7 @@ class BattleScreen(statemachine.GameState):
                             self.attack = False
                             self.melee = False
                             self.target = False
-                            self.party1.attack(self.enemy1)
+                            self.current_sprite.attack(self.enemy1)
                     if self.cursor_down_loc == self.enemy2_cur_loc:
                         if not self.enemy2:
                             print('no target')
@@ -781,7 +812,7 @@ class BattleScreen(statemachine.GameState):
                             self.attack = False
                             self.melee = False
                             self.target = False
-                            self.party1.attack(self.enemy2)
+                            self.current_sprite.attack(self.enemy2)
                     if self.cursor_down_loc == self.enemy3_cur_loc:
                         if not self.enemy3:
                             print('no target')
@@ -789,7 +820,7 @@ class BattleScreen(statemachine.GameState):
                             self.attack = False
                             self.melee = False
                             self.target = False
-                            self.party1.attack(self.enemy3)
+                            self.current_sprite.attack(self.enemy3)
                     if self.cursor_down_loc == self.enemy4_cur_loc:
                         if not self.enemy4:
                             print('no target')
@@ -797,7 +828,7 @@ class BattleScreen(statemachine.GameState):
                             self.attack = False
                             self.melee = False
                             self.target = False
-                            self.party1.attack(self.enemy4)
+                            self.current_sprite.attack(self.enemy4)
                     if self.cursor_down_loc == self.enemy5_cur_loc:
                         if not self.enemy5:
                             print('no target')
@@ -805,7 +836,7 @@ class BattleScreen(statemachine.GameState):
                             self.attack = False
                             self.melee = False
                             self.target = False
-                            self.party1.attack(self.enemy5)
+                            self.current_sprite.attack(self.enemy5)
 
                 ###   ATTACK
                 if self.position == settings.position['top_left']:

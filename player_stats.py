@@ -31,6 +31,11 @@ class Player_bat(pg.sprite.Sprite):
         self.health = self.stats['current_hit_points']
         self.init = 0
         self.turn = False
+        self.done = False
+        self.player = True
+
+
+
 
     def attack(self, target):
         atk_roll = randint(1, 20) + self.stats['str mod']
@@ -43,6 +48,8 @@ class Player_bat(pg.sprite.Sprite):
         else:
             self.game.miss = True
             self.game.miss_loc = target.loc
+        self.done = True
+        self.turn = False
 
     def init_roll(self):
         roll = randint(1, 10)

@@ -135,24 +135,31 @@ class Enemy(pg.sprite.Sprite):
         self.health = self.stats['current_hit_points']
         self.init = 0
         self.turn = False
+        self.done = False
         self.target = None
+        self.player = False
+
+
 
     def take_turn(self):
+
         self.attack()
         self.turn = False
+        self.done = True
 
     def attack(self):
-        target = self.get_target()
+
+        self.get_target()
         atk_roll = randint(1, 20) + self.stats['atk_bonus']
-        if atk_roll >= target.stats['AC']:
-            dam_roll = randint(self.stats['atk_dam_low', 'atk_dam_high']) + self.stats['dam_bonus']
-            target.stats['current_health'] -= dam_roll
+        if atk_roll >= self.target.stats['AC']:
+            dam_roll = randint(self.stats['atk_dam_low'], self.stats['atk_dam_high'])
+            self.target.stats['current_hit_points'] -= dam_roll
             self.game.damage_done = True
             self.game.damage_amount = dam_roll
-            self.game.damage_loc = target.loc
+            self.game.damage_loc = self.target.loc
         else:
             self.game.miss = True
-            self.game.miss_loc = target.loc
+            self.game.miss_loc = self.target.loc
 
     def init_roll(self):
         roll = randint(1, 10)
@@ -162,4 +169,9 @@ class Enemy(pg.sprite.Sprite):
         targets = []
         for party in self.game.party:
             targets.append(party.stats['current_hit_points'])
-        self.target = min(sorted(targets))
+        least_health = min(sorted(targets))
+        for party in self.game.party:
+            if party.stats['current_hit_points'] == least_health:
+                self.target = party
+            else:
+                pass
